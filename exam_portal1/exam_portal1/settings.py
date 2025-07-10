@@ -52,7 +52,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'exam_portal1.urls'
-
+import os
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -106,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # LANGUAGE_CODE = 'en-us'
 
-# TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'cpip install -U django-jazzminpip install -U django-jazzmin
 
 # USE_I18N = True
 
@@ -123,11 +123,10 @@ STATIC_URL = 'static/'
 
 # DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 JAZZMIN_SETTINGS = {
-    "site_title": "Sreenu ",
-    "site_header": "sreenu",
-    "site_brand": "sreenu",
+    "site_title": "Priya ",
+    "site_header": "Priya",
+    "site_brand": "Priya",
     "site_logo": "books/img/logo.png",
     "login_logo": None,
     "login_logo_dark": None,

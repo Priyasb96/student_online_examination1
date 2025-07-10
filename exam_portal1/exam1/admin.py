@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import classtype
+from .models import Questions
 
 # Register your models here.
-admin.site.register(classtype)
+admin.site.register(Questions)
