@@ -1,46 +1,66 @@
-from django.shortcuts import render,redirect, get_object_or_404
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django import forms
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-# Create your views here.
+from django.contrib import messages
+from .forms import RegisterForm
+import random
 
-
-class RegisterForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password']
-
-def register_view(request):
-     form = RegisterForm()
-     if request.method == 'POST':
-          form = RegisterForm(request.POST)
-          if form.is_valid():
-               form.save()
-               messages.success(request, "Register Successful")
-               return redirect('login')
-     return render(request, 'exam1/register.html',{'form': form})
+# Store OTPs temporarily (in memory)
+otp_store = {}
 
 def login_view(request):
-     if request.method == "POST":
-          username = request.POST.get("username")
-          password = request.POST.get("password")
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user:
+            otp = str(random.randint(100000, 999999))
+            otp_store[username] = otp
+            request.session["otp_user"] = username
+            print(f"OTP for {username}: {otp}")
+            messages.info(request, "OTP sent. Check terminal.")
+            return redirect('auth_page')
+        else:
+            messages.error(request, "Invalid username or password.")
+            return redirect('auth_page')
+    return redirect('auth_page')
 
-          user = authenticate(request, username=username, password=password)
-          if user:
-               login(request,user)
-               return redirect('admin')
-          else:
-               messages.error(request, "Invalid username or password.")
-               return redirect('login')
-     return render(request, 'exam1/login.html')
+
+def register_view(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Registration successful! You can now log in.")
+            return redirect('auth_page')
+    else:
+        form = RegisterForm()
+    return render(request, 'exam1/auth.html', {"form": form, "show": "register-form"})
+
 
 def verify_otp(request):
-      messages.info(request, "OTP verification placeholder.")
-      return redirect('admin')
+    username = request.session.get("otp_user")
+    if request.method == "POST":
+        entered_otp = request.POST.get("otp")
+        actual_otp = otp_store.get(username)
+        if entered_otp == actual_otp:
+            user = User.objects.get(username=username)
+            login(request, user)
+            del request.session["otp_user"]
+            messages.success(request, "OTP verified. You are now logged in.")
+            return redirect('auth_page')
+        else:
+            messages.error(request, "Invalid OTP. Please try again.")
+            return redirect('auth_page')
+    return render(request, 'exam1/auth.html', {"show": "otp-form"})
 
-# def logout_view(request):
-#       logout
-#       return render(request, 'exam1/dashboard.html')
+
+def auth_page(request):
+    form = RegisterForm()
+    return render(request, "exam1/auth.html", {"form": form, "show": "login-form"})
+
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, "You have been logged out.")
+    return redirect('auth_page')
