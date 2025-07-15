@@ -46,7 +46,7 @@ def verify_otp(request):
         if entered_otp == actual_otp:
             user = User.objects.get(username=username)
             login(request, user)
-            del request.session["otp_user"]
+            request.session.pop("otp_user", None)
             messages.success(request, "OTP verified. You are now logged in.")
             return redirect('auth_page')
         else:
@@ -60,7 +60,7 @@ def auth_page(request):
     return render(request, "exam1/auth.html", {"form": form, "show": "login-form"})
 
 
-def logout_view(request):
-    logout(request)
-    messages.info(request, "You have been logged out.")
-    return redirect('auth_page')
+# def logout_view(request):
+#     logout(request)
+#     messages.info(request, "You have been logged out.")
+#     return redirect('auth_page')

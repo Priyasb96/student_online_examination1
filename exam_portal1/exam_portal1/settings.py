@@ -123,6 +123,14 @@ STATIC_URL = 'static/'
 
 # DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+EMAIL_BACKEND = 'django.coe.mail.backends.smt.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'priyasb21@gmail.com'
+EMAIL_HOST_PASSWORD = 'vvvo cymy jpme nlpn'
+
+
 JAZZMIN_SETTINGS = {
     "site_title": "Priya ",
     "site_header": "Priya",
@@ -183,3 +191,4 @@ JAZZMIN_SETTINGS = {
     "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
     "language_chooser": False
 }
+
