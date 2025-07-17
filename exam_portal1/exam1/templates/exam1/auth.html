@@ -1,50 +1,280 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Authentication Successful</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            padding: 40px;
-            text-align: center;
-        }
-        .card {
-            background: white;
-            padding: 30px;
-            margin: auto;
-            max-width: 400px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        p {
-            font-size: 1.1em;
-            margin: 20px 0;
-        }
-        a {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        a:hover {
-            background: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Dashboard - Student Online Examination Portal</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      background: linear-gradient(to right, #e0eafc, #cfdef3);
+    }
+
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(#2c3e50, #4ca1af);
+      color: white;
+      padding: 20px;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar h4 {
+      color: #ecf0f1;
+      margin-top: 0;
+      border-bottom: 1px solid #7f8c8d;
+      padding-bottom: 10px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      padding: 10px;
+      margin-bottom: 5px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.3s ease;
+    }
+
+    .sidebar li:hover,
+    .sidebar li.active {
+      background-color: #1abc9c;
+      color: white;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: linear-gradient(to right, #2980b9, #6dd5fa);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .left-section,
+    .navbar .center-section,
+    .navbar .right-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .navbar input,
+    .navbar select {
+      padding: 6px;
+      border-radius: 4px;
+      border: none;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 20px;
+      padding: 25px;
+    }
+
+    .chart-box {
+      background: rgba(255, 255, 255, 0.7);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+      transition: transform 0.3s ease;
+      height: 350px;
+    }
+
+    .chart-box:hover {
+      transform: scale(1.02);
+    }
+
+    .chart-title {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    canvas {
+      margin-top: 30px;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 30px;
+      background: white;
+      color: black;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      padding: 10px;
+      width: 200px;
+    }
+
+    .profile:hover .dropdown {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-    <div class="card">
-        <h1>✅ Authentication Successful</h1>
-        <p>Your account has been verified successfully.</p>
-        <a href="{% url 'login' %}">Go to Login</a>
-        <br><br>
-        <a href="{% url 'dashboard' %}">Go to Dashboard</a>
+
+  <div class="sidebar">
+    <h4>Dashboards</h4>
+    <ul>
+      <li onclick="setDashboard('basic')">Bar & Line</li>
+      <li onclick="setDashboard('pie')">Pie & Radar</li>
+      <li onclick="setDashboard('advanced')">Scatter & Bubble</li>
+      <li onclick="setDashboard('all')" class="active">All Charts</li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="navbar">
+      <div class="left-section">
+        <div class="logo">🎓 Exam Portal</div>
+        <input type="text" id="searchBar" placeholder="Search charts..." />
+      </div>
+      <div class="center-section">
+        <select id="filter-year">
+          <option value="all">All Years</option>
+          <option value="2022">2022</option>
+          <option value="2023">2023</option>
+          <option value="2024">2024</option>
+        </select>
+        <select id="filter-role">
+          <option value="all">All Roles</option>
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+        </select>
+      </div>
+      <div class="right-section profile">
+        <span>User ⏷</span>
+        <div class="dropdown">
+          <strong>Name:</strong> John Doe<br>
+          <strong>Email:</strong> john@example.com<br>
+          <button onclick="location.href='/settings'">Settings</button><br>
+          <button onclick="location.href='/logout'">Logout</button>
+        </div>
+      </div>
     </div>
+
+    <div class="charts-grid" id="charts-container">
+      <!-- Charts inserted dynamically -->
+    </div>
+  </div>
+
+  <script>
+    const container = document.getElementById("charts-container");
+    const chartCategories = {
+      basic: ["bar", "line"],
+      pie: ["pie", "radar"],
+      advanced: ["scatter", "bubble"],
+      all: ["bar", "line", "pie", "radar", "scatter", "bubble", "doughnut"]
+    };
+    let currentCategory = "all";
+
+    function generateData(type) {
+      const labels = ["2019", "2020", "2021", "2022", "2023", "2024"];
+      const values = labels.map(() => Math.floor(Math.random() * 100));
+
+      if (type === "scatter" || type === "bubble") {
+        return {
+          datasets: [{
+            label: type.toUpperCase() + " Chart",
+            data: Array.from({ length: 10 }, () => ({
+              x: Math.random() * 100,
+              y: Math.random() * 100,
+              r: Math.random() * 10 + 5,
+            })),
+            backgroundColor: "#9b59b6"
+          }]
+        };
+      }
+
+      return {
+        labels,
+        datasets: [{
+          label: type.toUpperCase() + " Chart",
+          data: values,
+          backgroundColor: ["#f1c40f", "#e67e22", "#e74c3c", "#2ecc71", "#3498db", "#1abc9c"],
+          borderColor: "#2c3e50",
+          borderWidth: 2,
+          fill: type === "line" || type === "radar"
+        }]
+      };
+    }
+
+    function generateCharts() {
+      container.innerHTML = "";
+      const searchText = document.getElementById("searchBar").value.toLowerCase();
+      const typesToShow = chartCategories[currentCategory];
+
+      typesToShow.forEach((type, index) => {
+        if (!type.includes(searchText)) return;
+
+        const box = document.createElement("div");
+        box.className = "chart-box";
+
+        const title = document.createElement("div");
+        title.className = "chart-title";
+        title.innerText = type.charAt(0).toUpperCase() + type.slice(1) + " Chart";
+
+        const canvas = document.createElement("canvas");
+        canvas.id = "chart" + index;
+
+        box.appendChild(title);
+        box.appendChild(canvas);
+        container.appendChild(box);
+
+        new Chart(canvas, {
+          type: type === "doughnut" ? "doughnut" : type,
+          data: generateData(type),
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: (type === "bar" || type === "line") ? {
+              x: { beginAtZero: true },
+              y: { beginAtZero: true }
+            } : {}
+          }
+        });
+      });
+    }
+
+    function setDashboard(category) {
+      currentCategory = category;
+      document.querySelectorAll(".sidebar li").forEach(li => li.classList.remove("active"));
+      document.querySelectorAll(".sidebar li").forEach(li => {
+        if (li.textContent.toLowerCase().includes(category)) {
+          li.classList.add("active");
+        }
+      });
+      generateCharts();
+    }
+
+    document.getElementById("searchBar").addEventListener("input", generateCharts);
+    document.getElementById("filter-year").addEventListener("change", generateCharts);
+    document.getElementById("filter-role").addEventListener("change", generateCharts);
+
+    generateCharts();
+  </script>
 </body>
 </html>

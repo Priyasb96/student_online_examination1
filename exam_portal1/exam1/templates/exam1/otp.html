@@ -1,34 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login</title>
+  <title>OTP Verification</title>
   <style>
-    body { background: #eef2f3; font-family: sans-serif; }
-    .container { width: 350px; margin: auto; padding: 40px; background: white; border-radius: 10px; box-shadow: 0 0 15px #ccc; margin-top: 80px; }
-    input, button { width: 100%; margin: 10px 0; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
-    .toggle { position: absolute; right: 15px; top: 38px; cursor: pointer; }
+    body {
+      background: #dff9fb;
+      font-family: sans-serif;
+      margin: 0;
+    }
+
+    .container {
+      width: 340px;
+      margin: 60px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #ccc;
+      text-align: center;
+    }
+
+    .otp-boxes {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+    }
+
+    .otp-boxes input {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      text-align: center;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button[type="submit"] {
+      background: #0984e3;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    button[type="submit"]:hover {
+      background: #074e9c;
+    }
+
+    a {
+      display: block;
+      margin-top: 15px;
+      color: #2d3436;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    #timer {
+      color: #636e72;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Login</h2>
-    <form method="post">{% csrf_token %}
-      <input type="text" name="username" placeholder="Username" required />
-      <div style="position:relative;">
-        <input type="password" name="password" id="loginPassword" placeholder="Password" required />
-        <span class="toggle" onclick="togglePassword()">👁</span>
+    <h2>Verify OTP</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="otp-boxes">
+        {% for i in "123456" %}
+          <input type="text" name="digit{{ forloop.counter }}" maxlength="1" required />
+        {% endfor %}
       </div>
-      <label><input type="checkbox" name="remember"> Remember Me</label>
-      <p><a href="#">Forgot Password?</a></p>
-      <button type="submit">Login</button>
-      <p><a href="{% url 'register' %}">Create Account</a></p>
+      <p id="timer">Resend available in 30s</p>
+      <button type="submit">Verify</button>
     </form>
+    <a href="{% url 'resend_otp' %}">Resend OTP</a>
   </div>
+
   <script>
-    function togglePassword() {
-      let input = document.getElementById('loginPassword');
-      input.type = input.type === 'password' ? 'text' : 'password';
-    }
+    let t = 30;
+    const timer = document.getElementById('timer');
+    const countdown = setInterval(() => {
+      t--;
+      timer.textContent = t > 0 ? Resend available in ${t}s : "You can now resend.";
+      if (t <= 0) clearInterval(countdown);
+    }, 1000);
   </script>
 </body>
 </html>

@@ -62,4 +62,5 @@ urlpatterns = [
     path('verify/', views.otp_view, name='verify_otp'),
     path('login/', views.login_view, name='login'),
     path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('resend-otp/', views.resend_otp, name='resend_otp'),
 ]
