@@ -14,15 +14,52 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# from django.contrib import admin
+# from django.urls import path, include
+# from exam1 import views 
+
+# urlpatterns = [
+#     path('', views.auth_page, name='auth_page'),
+#     path('admin/', admin.site.urls),
+#     path('register/', views.register_view, name='register'),    # ✅ Make sure this is correct
+#     path('verify/',views.verify_otp,name='verify_otp'),
+#     path('login/',views.login_view, name='login'),
+# ]
+
+# from django.contrib import admin
+# from django.urls import path, include
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('', include('exam1.urls')),  # ✅ Connect your app here
+# ]
+
+
+# from django.contrib import admin
+# from django.urls import path, include
+# from exam1 import views
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('', include('exam1.urls')),
+#     path('', views.home_view, name='home'),  # Home page route
+#     path('dashboard/', views.dashboard, name='dashboard'),  # Dashboard route
+# ]
+
 from django.contrib import admin
-from django.urls import path, include
-from exam1 import views 
+from django.urls import path
+from exam1 import views  # assuming your views are in exam/views.py
 
 urlpatterns = [
-    path('', views.auth_page, name='auth_page'),
+    path('', views.auth_page, name='auth_page'),  # 👈 This handles the root URL
+   
+    path('auth/', views.auth_page, name='auth_page'),
+    path('register/', views.register_view, name='register'),
+    #path('verify/', views.verify_otp, name='verify_otp'),
+    path('verify/', views.otp_view, name='verify_otp'),
+    path('login/', views.login_view, name='login'),
     path('admin/', admin.site.urls),
-    path('register/', views.register_view, name='register'),    # ✅ Make sure this is correct
-    path('verify/',views.verify_otp,name='verify_otp'),
-    path('login/',views.login_view, name='login'),
+    #path('dashboard/', views.dashboard, name='dashboard'),  # Example dashboard path
+    path('dashboard/', views.dashboard_view, name='dashboard'),  # Use the correct function name
 ]
 

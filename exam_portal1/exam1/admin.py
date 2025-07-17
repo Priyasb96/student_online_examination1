@@ -38,3 +38,14 @@ class ResultAdmin(admin.ModelAdmin):
     def percentage_display(self, obj):
         return f"{obj.percentage():.2f}%"
     percentage_display.short_description = 'Percentage'
+
+
+# from django.contrib import admin
+# from .models import User, Student, Subject, Invigilator, Exam, Result
+
+# admin.site.register(User)
+# admin.site.register(Student)
+# admin.site.register(Subject)
+# admin.site.register(Invigilator)
+# admin.site.register(Exam)
+# admin.site.register(Result)

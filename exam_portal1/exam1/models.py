@@ -1,5 +1,15 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+# ✅ Custom User model with role field
+class User(AbstractUser):
+    ROLE_CHOICES = (
+        ('student', 'Student'),
+        ('invigilator', 'Invigilator'),
+    )
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+
+# ✅ Existing models
 class Student(models.Model):
     name = models.CharField(max_length=100)
     roll_number = models.CharField(max_length=20, unique=True)

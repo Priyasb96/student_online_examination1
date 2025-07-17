@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'exam1.User'
 
 # Application definition
 
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'exam1',
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -106,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # LANGUAGE_CODE = 'en-us'
 
-# TIME_ZONE = 'UTC'cpip install -U django-jazzminpip install -U django-jazzmin
+# TIME_ZONE = 'UTC'  #cpip install -U django-jazzminpip install -U django-jazzmin
 
 # USE_I18N = True
 
@@ -123,7 +126,7 @@ STATIC_URL = 'static/'
 
 # DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = 'django.coe.mail.backends.smt.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -140,7 +143,7 @@ JAZZMIN_SETTINGS = {
     "login_logo_dark": None,
     "site_logo_classes": "img-circle",
     "site_icon": None,
-    "welcome_sign": "Welcome to the sreenu admin panel",
+    "welcome_sign": "Welcome to the priya admin panel",
     "copyright": "Acme Library Ltd",
     "search_model": ["auth.User", "auth.Group"],
     "user_avatar": None,
