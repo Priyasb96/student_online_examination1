@@ -47,19 +47,9 @@ Including another URLconf
 # ]
 
 from django.contrib import admin
-from django.urls import path
-from exam1 import views  # assuming your views are in exam/views.py
+from django.urls import path, include
 
 urlpatterns = [
-    path('', views.auth_page, name='auth_page'),  # 👈 This handles the root URL
-   
-    path('auth/', views.auth_page, name='auth_page'),
-    path('register/', views.register_view, name='register'),
-    #path('verify/', views.verify_otp, name='verify_otp'),
-    path('verify/', views.otp_view, name='verify_otp'),
-    path('login/', views.login_view, name='login'),
     path('admin/', admin.site.urls),
-    #path('dashboard/', views.dashboard, name='dashboard'),  # Example dashboard path
-    path('dashboard/', views.dashboard_view, name='dashboard'),  # Use the correct function name
+    path('', include('exam1.urls')),
 ]
-

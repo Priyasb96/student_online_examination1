@@ -27,7 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
 AUTH_USER_MODEL = 'exam1.User'
+
 
 # Application definition
 
@@ -133,6 +135,17 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'priyasb21@gmail.com'
 EMAIL_HOST_PASSWORD = 'vvvo cymy jpme nlpn'
 
+# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# # DEFAULT_FROM_EMAIL = 'karjagi1996@gmail.com'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'karjagi1996@gmail.com'
+# EMAIL_HOST_PASSWORD = 'kpia wnku bocv rvfp'  # 16-digit app password
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 JAZZMIN_SETTINGS = {
     "site_title": "Priya ",
@@ -157,7 +170,8 @@ JAZZMIN_SETTINGS = {
 
     "usermenu_links": [
         {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
-        {"model": "auth.User"}
+        {"model": "auth.User"},
+
     ],
 
     "show_sidebar": True,

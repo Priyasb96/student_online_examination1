@@ -53,14 +53,16 @@ Including another URLconf
 #     path('dashboard/', views.dashboard, name='dashboard'),  # optional if you still want /dashboard/
 # ]
 
+
 from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.auth_page, name='auth_page'),
-    path('register/', views.register_view, name='register'),
-    path('verify/', views.otp_view, name='verify_otp'),
-    path('login/', views.login_view, name='login'),
-    path('dashboard/', views.dashboard_view, name='dashboard'),
-    path('resend-otp/', views.resend_otp, name='resend_otp'),
+    path('', views.home, name='home'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login_view, name='login'),  # Must match 'login' name
+    path('otp/', views.otp_verify, name='otp_verify'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('logout/', views.logout_view, name='logout'),
+
 ]
